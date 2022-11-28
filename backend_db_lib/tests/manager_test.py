@@ -1,6 +1,6 @@
 import unittest
-from app.models import base
-from app.manager import DatabaseManager
+from backend_db_lib.models import base
+from backend_db_lib.manager import DatabaseManager
 
 class TestDatabaseManager(unittest.TestCase):
 

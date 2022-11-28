@@ -10,8 +10,8 @@ services:
       POSTGRES_DB: backend
       PGPORT: 8000
     ports:
-      - 8000:8000
-      -
+      - 8010:8000
+
   db-manager:
     # pgadmin database manager, up to personal preference
     image: dpage/pgadmin4:latest
@@ -20,11 +20,11 @@ services:
       PGADMIN_DEFAULT_EMAIL: backend@backend.xyz
       PGADMIN_DEFAULT_PASSWORD: backend
     ports:
-      - 8001:80
+      - 8011:80
 
   wait-for-db:
     # check if database is up before execution of uvicorn
     image: atkrad/wait4x
     depends_on:
       - db
-    command: tcp db:8000 -t 30s -i 500ms
+    command: tcp db:8010 -t 30s -i 500ms
