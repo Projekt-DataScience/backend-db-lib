@@ -11,8 +11,9 @@ services:
       PGPORT: 8000
     ports:
       - 8000:8000
-
+      -
   db-manager:
+    # pgadmin database manager, up to personal preference
     image: dpage/pgadmin4:latest
     restart: always
     environment:
