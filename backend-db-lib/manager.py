@@ -1,6 +1,6 @@
 from sqlalchemy import (create_engine)
 from sqlalchemy.orm import sessionmaker
-from .models import base, Company, User, Role, Layer, Group
+from .models import Company, User, Role, Layer, Group
 
 
 class DatabaseManager:
