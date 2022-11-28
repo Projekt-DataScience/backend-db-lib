@@ -1,6 +1,5 @@
-from sqlalchemy import (Column, Integer, String,
-                        create_engine, ForeignKey, DateTime, Boolean)
-from sqlalchemy.orm import sessionmaker, declarative_base, relationship
+from sqlalchemy import (Column, Integer, String, ForeignKey, DateTime, Boolean)
+from sqlalchemy.orm import declarative_base, relationship
 from passlib.context import CryptContext
 
 base = declarative_base()
@@ -10,25 +9,37 @@ PASSLIB_CONTEXT = CryptContext(
     deprecated='auto',
 )
 
+
 class Company(base):
     __tablename__ = 'company'
 
-    company_id = Column('CompanyID', Integer, primary_key=True, autoincrement=True)
-    company_name = Column('CompanyName', String(100))
+    id = Column('id', Integer, primary_key=True, autoincrement=True)
+    company_name = Column('company_name', String(100))
 
 
 class User(base):
     __tablename__ = 'user'
 
-    user_id = Column('UserID', Integer, primary_key=True, autoincrement=True)
-    first_name = Column('FirstName', String(50))
-    last_name = Column('LastName', String(50))
-    email = Column('Email', String(50))
-    password_hash = Column('PasswordHash', String(255))
-    profile_picture_url = Column('ProfilePictureURL', String(255))
-    supervisor_user_id = Column('SupervisorUserID', ForeignKey('user.UserID'))
-    company_id = Column('CompanyID', Integer, ForeignKey('company.CompanyID'))
-    role_id = Column('RoleID', ForeignKey('role.RoleID'))
+    id = Column('id', Integer, primary_key=True, autoincrement=True)
+    first_name = Column('first_name', String(50))
+    last_name = Column('last_name', String(50))
+    email = Column('email', String(50))
+    password_hash = Column('password_hash', String(255))
+    profile_picture_url = Column('profile_picture_url', String(255))
+
+    # foreign keys
+    supervisor_id = Column('supervisor_user_id', ForeignKey('user.id'), nullable=True)
+    company_id = Column('company_id', Integer, ForeignKey('company.id'), nullable=False)
+    role_id = Column('role_id', ForeignKey('role.id'), nullable=False)
+    layer_id = Column('layer_id', ForeignKey('layer.id'), nullable=True)
+    group_id = Column('group_id', ForeignKey('group.id'), nullable=True)
+
+    # proxy bindings
+    supervisor = relationship('User', foreign_keys='User.supervisor_id')
+    company = relationship('Company', foreign_keys='User.company_id')
+    role = relationship('Role', foreign_keys='User.role_id')
+    layer = relationship('Layer', foreign_keys='User.layer_id')
+    group = relationship('Group', foreign_keys='User.group_id')
 
     @property
     def password(self):
@@ -46,111 +57,132 @@ class User(base):
         return PASSLIB_CONTEXT.hash(password.encode('utf8'))
 
 
-
 class Role(base):
     __tablename__ = 'role'
-    role_id = Column('RoleID', Integer, primary_key=True, autoincrement=True)
-    role_name = Column('RoleName', String(50))
+
+    id = Column('id', Integer, primary_key=True, autoincrement=True)
+    role_name = Column('role_name', String(50))
+    # todo: add permission string
 
 
 class Group(base):
     __tablename__ = 'group'
-    group_id = Column('GroupID', Integer, primary_key=True, autoincrement=True)
-    group_name = Column('GroupName', String(100))
+
+    id = Column('id', Integer, primary_key=True, autoincrement=True)
+    group_name = Column('group_name', String(100))
 
 
-class Audit(base):
-    __tablename__ = 'audit'
-    audit_id = Column('AuditID', Integer, primary_key=True, autoincrement=True)
-    due_date = Column('DueDate', DateTime)
-    duration = Column('Duration', Integer)
-    recurrent_audit = Column('RecurrentAudit', Boolean)
-    created_by = Column('CreatedBy', ForeignKey('user.UserID'))
-    audited_user = Column('AuditedUser', ForeignKey('user.UserID'))
-    auditor = Column('Auditor', ForeignKey('user.UserID'))
-    assigned_group = Column('AssignedGroup', ForeignKey('group.GroupID'))
-    questions = relationship('lpa_question_audit')
+class AuditQuestionAssociation(base):
+    __tablename__ = 'audit_question_association'
+
+    id = Column('id', Integer, primary_key=True, autoincrement=True)
+
+    # foreign keys
+    audit_id = Column("audit_id", ForeignKey("lpa_audit.id"))
+    question_id = Column("question_id", ForeignKey("lpa_question.id"), nullable=False)
+
+    # proxy bindings
+    audit = relationship('LPAAudit', foreign_keys='AuditQuestionAssociation.audit_id')
+    question = relationship('LPAQuestion', foreign_keys='AuditQuestionAssociation.question_id')
 
 
 class Layer(base):
     __tablename__ = 'layer'
-    layer_id = Column('LayerID', Integer, primary_key=True, autoincrement=True)
-    layer_name = Column('LayerName', String(100))
-    layer_number = Column('LayerNumber', Integer)
+
+    id = Column('id', Integer, primary_key=True, autoincrement=True)
+    layer_name = Column('layer_name', String(100))
+    layer_number = Column('Layer_number', Integer)
+
+    # foreign_keys
+    company_id = Column('company_id', ForeignKey('company.id'), nullable=False)
+
+    # proxy bindings
+    company = relationship('Company', foreign_keys='Layer.company_id')
+
+
+class LPAAudit(base):
+    __tablename__ = 'lpa_audit'
+
+    id = Column('id', Integer, primary_key=True, autoincrement=True)
+    due_date = Column('due_date', DateTime)
+    duration = Column('duration', Integer)
+    recurrent_audit = Column('recurrent_audit', Boolean)
+
+    # foreign keys
+    created_by_user_id = Column('created_by_user_id', ForeignKey('user.id'), nullable=False)
+    audited_user_id = Column('audited_user_id', ForeignKey('user.id'), nullable=False)
+    auditor_user_id = Column('auditor_user_id', ForeignKey('user.id'), nullable=False)
+    assigned_group_id = Column('assigned_group_id', ForeignKey('group.id'), nullable=False)
+    assigned_layer_id = Column('assigned_layer_id', ForeignKey('layer.id'), nullable=False)
+
+    # proxy bindings
+    created_by = relationship('User', foreign_keys='LPAAudit.created_by_user_id')
+    audited_user = relationship('User', foreign_keys='LPAAudit.audited_user_id')
+    auditor = relationship('User', foreign_keys='LPAAudit.auditor_user_id')
+    assigned_group = relationship('Group', foreign_keys='LPAAudit.assigned_group_id')
+    assigned_layer = relationship('Layer', foreign_keys='LPAAudit.assigned_layer_id')
+
+    # n m relationship
+    questions = relationship("LPAQuestion", secondary='audit_question_association')
+
 
 class LPAQuestionCategory(base):
-    __tablename__ = 'lpa_question_audit_category'
-    category_id = Column('LPAQuestionAuditCategoryID', Integer, primary_key=True, autoincrement=True)
-    category_name = Column('Category', String(250))
+    __tablename__ = 'lpa_question_category'
+
+    id = Column('id', Integer, primary_key=True, autoincrement=True)
+    category_name = Column('category_name', String(250))
 
 
 class LPAQuestion(base):
-    __tablename__ = 'lpa_question_audit'
-    group_id = Column('QuestionID', Integer, primary_key=True, autoincrement=True)
-    question = Column('Question', String(250))
-    description = Column('Description', String(250))
-    category_id = Column('CategoryID', ForeignKey('lpa_question_audit_category.LPAQuestionAuditCategoryID'))
+    __tablename__ = 'lpa_question'
+
+    id = Column('id', Integer, primary_key=True, autoincrement=True)
+    question = Column('question', String(250))
+    description = Column('description', String(250))
+
+    # foreign keys
+    category_id = Column('category_id', ForeignKey('lpa_question_category.id'), nullable=False)
+
+    # proxy bindings
+    category = relationship('LPAQuestionCategory', foreign_keys='LPAQuestion.category_id')
 
 
 class LPAAnswer(base):
     __tablename__ = 'lpa_answer'
-    answer_id = Column('LPAAnswerID', Integer, primary_key=True, autoincrement=True)
-    answer = Column('Answer', Integer)
-    comment = Column('Comment', String(250))
+
+    id = Column('id', Integer, primary_key=True, autoincrement=True)
+    answer = Column('answer', Integer)
+    comment = Column('comment', String(250))
 
 
 class LPAAnswerReason(base):
     __tablename__ = 'lpa_answer_reason'
-    answer_reason_id = Column('LPAAnswerReasonID', Integer, primary_key=True, autoincrement=True)
-    description = Column('Description', String(250))
+
+    id = Column('id', Integer, primary_key=True, autoincrement=True)
+    description = Column('description', String(250))
 
 
 class LPAAuditRecurrenceType(base):
-    __tablename__ = 'lpa_audit_recurrence_type'
-    recurrence_type_id = Column('LPAAuditRecurrenceTypeID', Integer, primary_key=True, autoincrement=True)
-    description = Column('Description', Integer)
+    __tablename__ = 'lpa_recurrence_type'
+
+    id = Column('id', Integer, primary_key=True, autoincrement=True)
+    description = Column('description', Integer)
 
 
 class LPAAuditRecurrence(base):
     __tablename__ = 'lpa_audit_recurrence'
-    recurrence_id = Column('LPAAuditRecurrenceID', Integer, primary_key=True, autoincrement=True)
-    value = Column('Value', Integer)
-    question_count = Column('LPAQuestionCount', Integer)
-    group_id = Column('GroupID', ForeignKey('group.GroupID'))
-    recurrence_type_id = Column('RecurrenceTypeID', ForeignKey('lpa_audit_recurrence_type.LPAAuditRecurrenceTypeID'))
 
+    id = Column('id', Integer, primary_key=True, autoincrement=True)
+    value = Column('value', Integer)
+    question_count = Column('question_count', Integer)
 
+    # foreign keys
+    group_id = Column('group_id', ForeignKey('group.id'), nullable=False)
+    layer_id = Column('layer_id', ForeignKey('layer.id'), nullable=False)
+    recurrence_type_id = Column('recurrence_type_id', ForeignKey('lpa_recurrence_type.id'),
+                                nullable=False)
 
-
-class DatabaseManager:
-    def __init__(self, database_url):
-        db = create_engine(database_url, echo=True)
-        self.create_session = sessionmaker(db)
-        base.metadata.create_all(db)
-        self.create_initial_data()
-
-    def create_initial_data(self):
-        with self.create_session() as session:
-            comp = Company(
-                company_id=None,
-                company_name='Failed Venture. INC'
-            )
-            session.add(comp)
-            role = Role(
-                role_id=None,
-                role_name='Admin',
-            )
-            session.add(role)
-
-            session.add(User(
-                user_id=None,
-                first_name='Franz',
-                last_name='Xaver',
-                email='franz@hans.de',
-                password_hash=User.generate_hash('test'),
-                profile_picture_url=None,
-                supervisor_user_id=None,
-                company_id=comp.company_id,
-                role_id=role.role_id,
-            ))
-            session.commit()
+    # proxy bindings
+    group = relationship('Group', foreign_keys='LPAAuditRecurrence.group_id')
+    layer = relationship('Layer', foreign_keys='LPAAuditRecurrence.layer_id')
+    recurrence_type = relationship('LPAAuditRecurrenceType', foreign_keys='LPAAuditRecurrence.recurrence_type_id')
