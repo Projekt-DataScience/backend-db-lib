@@ -42,12 +42,14 @@ class DatabaseManager:
             for role in roles:
                 session.add(role)
 
+            session.flush()
             # add groups
             group_names = ['Fertigung', 'QA', 'Marketing']
             groups = [
                 Group(
                     id=None,
                     group_name=x,
+		    company_id=company.id
                 ) for x in group_names
             ]
             for group in groups:

@@ -70,7 +70,12 @@ class Group(base):
 
     id = Column('id', Integer, primary_key=True, autoincrement=True)
     group_name = Column('group_name', String(100))
-    group_id = Column('group_id', ForeignKey('group.id'), nullable=True)
+
+    #foreign keys
+    company_id = Column('company_id', Integer, ForeignKey('company.id'), nullable=False)
+
+    # proxy bindings
+    company = relationship('Company', foreign_keys='Group.company_id')
 
 
 class AuditQuestionAssociation(base):
