@@ -70,6 +70,7 @@ class Group(base):
 
     id = Column('id', Integer, primary_key=True, autoincrement=True)
     group_name = Column('group_name', String(100))
+    group_id = Column('group_id', ForeignKey('group.id'), nullable=True)
 
 
 class AuditQuestionAssociation(base):
