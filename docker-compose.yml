@@ -1,4 +1,4 @@
-version: "1"
+version: "3.3"
 
 services:
   db:
@@ -8,9 +8,11 @@ services:
       POSTGRES_USER: backendgang
       POSTGRES_PASSWORD: backendgang
       POSTGRES_DB: backend
-      PGPORT: 8000
+      PGPORT: 8010
     ports:
-      - 8010:8000
+      - 8010:8010
+    networks:
+      - microservice-network
 
   db-manager:
     # pgadmin database manager, up to personal preference
@@ -21,6 +23,8 @@ services:
       PGADMIN_DEFAULT_PASSWORD: backend
     ports:
       - 8011:80
+    networks:
+      - microservice-network
 
   wait-for-db:
     # check if database is up before execution of uvicorn
@@ -28,3 +32,9 @@ services:
     depends_on:
       - db
     command: tcp db:8010 -t 30s -i 500ms
+    networks:
+      - microservice-network
+
+networks:
+  microservice-network:
+    external: true
