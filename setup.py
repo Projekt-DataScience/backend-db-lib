@@ -6,5 +6,4 @@ setup(
     description='Backend Database Library',
     author='Backend-Gang',
     license='MIT',
-    test_suite="tests",
 )
