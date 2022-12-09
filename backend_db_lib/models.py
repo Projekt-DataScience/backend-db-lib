@@ -116,7 +116,7 @@ class LPAAudit(base):
 
     # foreign keys
     created_by_user_id = Column('created_by_user_id', ForeignKey('user.id'), nullable=False)
-    audited_user_id = Column('audited_user_id', ForeignKey('user.id'), nullable=False)
+    audited_user_id = Column('audited_user_id', ForeignKey('user.id'), nullable=True)
     auditor_user_id = Column('auditor_user_id', ForeignKey('user.id'), nullable=False)
     assigned_group_id = Column('assigned_group_id', ForeignKey('group.id'), nullable=False)
     assigned_layer_id = Column('assigned_layer_id', ForeignKey('layer.id'), nullable=False)
@@ -155,8 +155,6 @@ class LPAQuestion(base):
     category = relationship('LPAQuestionCategory', foreign_keys='LPAQuestion.category_id')
     layer = relationship('Layer', foreign_keys='LPAQuestion.layer_id')
     group = relationship('Group', foreign_keys='LPAQuestion.group_id')
-    
-
 
 class LPAAnswer(base):
     __tablename__ = 'lpa_answer'
