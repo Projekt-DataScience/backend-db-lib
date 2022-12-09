@@ -13,8 +13,11 @@ class DatabaseManager:
         # clean database
         #self.drop_all()
 
+        #self._meta.create_all(self._db)
+        #self.create_initial_data()
+
+    def create_all(self):
         self._meta.create_all(self._db)
-        self.create_initial_data()
 
     def drop_all(self):
         self._meta.drop_all(bind=self._db, tables=self.tables().values())
