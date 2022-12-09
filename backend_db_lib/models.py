@@ -148,9 +148,14 @@ class LPAQuestion(base):
 
     # foreign keys
     category_id = Column('category_id', ForeignKey('lpa_question_category.id'), nullable=False)
+    layer_id = Column('layer_id', ForeignKey('layer.id'), nullable=True)
+    group_id = Column('group_id', ForeignKey('group.id'), nullable=True)
 
     # proxy bindings
     category = relationship('LPAQuestionCategory', foreign_keys='LPAQuestion.category_id')
+    layer = relationship('Layer', foreign_keys='LPAQuestion.layer_id')
+    group = relationship('Group', foreign_keys='LPAQuestion.group_id')
+    
 
 
 class LPAAnswer(base):
