@@ -11,7 +11,7 @@ class DatabaseManager:
         self.create_session = sessionmaker(self._db)
 
         # clean database
-        self.drop_all()
+        #self.drop_all()
 
         self._meta.create_all(self._db)
         self.create_initial_data()
