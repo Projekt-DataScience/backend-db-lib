@@ -163,6 +163,12 @@ class LPAAnswer(base):
     answer = Column('answer', Integer)
     comment = Column('comment', String(250))
 
+    # foreign keys
+    lpa_answer_reason_id = Column('lpa_answer_reason_id', ForeignKey('lpa_answer_reason.id', ondelete='SET NULL'), nullable=True)
+
+    # proxy bindings
+    lpa_answer_reason = relationship('LPAAnswerReason', foreign_keys='LPAAnswer.lpa_answer_reason_id')
+
 
 class LPAAnswerReason(base):
     __tablename__ = 'lpa_answer_reason'
