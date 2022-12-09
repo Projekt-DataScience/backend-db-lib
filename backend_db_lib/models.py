@@ -110,8 +110,8 @@ class LPAAudit(base):
     __tablename__ = 'lpa_audit'
 
     id = Column('id', Integer, primary_key=True, autoincrement=True)
-    due_date = Column('due_date', DateTime)
-    duration = Column('duration', Integer)
+    due_date = Column('due_date', DateTime, nullable=False)
+    duration = Column('duration', Integer, nullable=True)
     recurrent_audit = Column('recurrent_audit', Boolean)
 
     # foreign keys
