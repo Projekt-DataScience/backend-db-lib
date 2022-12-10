@@ -11,63 +11,79 @@ Database library for use by services
 When this repository changes, you can reinstall it, by following the following steps.
 
 1. The changes should already be pushed to this main branch
+
 [![2022-12-10-10-55.png](https://i.postimg.cc/5N4xpkMM/2022-12-10-10-55.png)](https://postimg.cc/K4WS8fz9)
 
 2. Stop you database server
+
 [![2022-12-10-10-54.png](https://i.postimg.cc/FHXY9VMW/2022-12-10-10-54.png)](https://postimg.cc/6yzWcn5n)
 
 3. Navigate to the repository, where you have installed this library and want to update. In this case I want to update it for backend-audit. Activate you virtualenv if not done yet
+
 [![2022-12-10-10-57.png](https://i.postimg.cc/MZjsNWq7/2022-12-10-10-57.png)](https://postimg.cc/mhBNFWck)
 
 4. Reinstall the library with the following pip command. This command will uninstall and install the backend_db_lib library.
+
 ```
 pip install --upgrade --force-reinstall git+https://github.com/Projekt-DataScience/backend-db-lib@main#egg=backend_db_lib
 ```
+
 [![2022-12-10-10-58.png](https://i.postimg.cc/T3mfP8Vg/2022-12-10-10-58.png)](https://postimg.cc/TKRZk4H3)
 
 You can also reinstall all packages, if you have a requirements.txt file, with the following command:
+
 ```
 pip install --upgrade --force-reinstall -r /app/requirements.txt
 ```
 
-5. Delete docker containers of your repository. The following command will delete all unused containers, so be carefull.
+5. Delete docker containers of your repository. The following command will delete all unused containers, so be careful
+
 ```
 docker container prune
 ```
+
 [![2022-12-10-11-03.png](https://i.postimg.cc/nrRBM9tR/2022-12-10-11-03.png)](https://postimg.cc/xNmc4C8M)
 
 If you just want to delete specific containers, then run the following command:
+
 ```
 docker container rm [CONTAINER_IDS]
 ```
 
 6. Delete the volume of your container. You can do that with the following command. But be careful that command deletes all unused volumes.
+
 ```
 docker volume prune
 ```
+
 [![2022-12-10-11-05.png](https://i.postimg.cc/X7g7K6GW/2022-12-10-11-05.png)](https://postimg.cc/YhhHkVzD)
 
 If you want to delete specific volumes, then use the following command:
+
 ```
 docker volume rm [OPTIONS] VOLUME [VOLUME...]
 ```
 
 7. Next you can start the database container again. Make sure, you are in the right directory. For me it is `~/Projects/backend-db-lib`
+
 ```
 docker-compose up
 ```
 
 Wait until the database server and Admin UI are fully up.
+
 [![2022-12-10-11-09.png](https://i.postimg.cc/g2YHzh6W/2022-12-10-11-09.png)](https://postimg.cc/QHyTSHb4)
 
 [![2022-12-10-11-08.png](https://i.postimg.cc/W4NWHK70/2022-12-10-11-08.png)](https://postimg.cc/JsF5ypvh)
 
  8. Next you can build your containers again. Make sure you are in the right directory, for me it is `~/Projects/backend-audit`:
+ 
  ```
  docker-compose up --build
  ```
  
  You should see, that the backend_db_lib is installed again.
+ 
  [![2022-12-10-11-11.png](https://i.postimg.cc/0yghcc3C/2022-12-10-11-11.png)](https://postimg.cc/0bftNd96)
  
  [![2022-12-10-11-12.png](https://i.postimg.cc/50TM11Ph/2022-12-10-11-12.png)](https://postimg.cc/bDx59Xfg)
@@ -77,9 +93,11 @@ Wait until the database server and Admin UI are fully up.
  [![2022-12-10-11-13.png](https://i.postimg.cc/fT71qxNn/2022-12-10-11-13.png)](https://postimg.cc/kB4jBRGf)
  
  9. Next go to the examples directory inside the backend-db-lib repository. There should be a virtualenv, which you should activate.
+ 
  [![2022-12-10-11-15.png](https://i.postimg.cc/cLywCngH/2022-12-10-11-15.png)](https://postimg.cc/0bnbHrCR)
  
- 10. Inside this virtualenv, you should also reinstall the library.
+10. Inside this virtualenv, you should also reinstall the library.
+
 ```
 pip install --upgrade --force-reinstall git+https://github.com/Projekt-DataScience/backend-db-lib@main#egg=backend_db_lib
 ```
@@ -87,6 +105,7 @@ pip install --upgrade --force-reinstall git+https://github.com/Projekt-DataScien
 [![2022-12-10-11-16.png](https://i.postimg.cc/fRCcPbyR/2022-12-10-11-16.png)](https://postimg.cc/QFBK9hc2)
 
 11. Now run the create_schema.py scripts, to create the schema and add some dummy data.
+
 ```
 python create_schema.py
 ```
