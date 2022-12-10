@@ -28,8 +28,10 @@ class User(base):
     profile_picture_url = Column('profile_picture_url', String(255))
 
     # foreign keys
-    supervisor_id = Column('supervisor_user_id', ForeignKey('user.id'), nullable=True)
-    company_id = Column('company_id', Integer, ForeignKey('company.id'), nullable=False)
+    supervisor_id = Column('supervisor_user_id',
+                           ForeignKey('user.id'), nullable=True)
+    company_id = Column('company_id', Integer,
+                        ForeignKey('company.id'), nullable=False)
     role_id = Column('role_id', ForeignKey('role.id'), nullable=False)
     layer_id = Column('layer_id', ForeignKey('layer.id'), nullable=True)
     group_id = Column('group_id', ForeignKey('group.id'), nullable=True)
@@ -71,8 +73,9 @@ class Group(base):
     id = Column('id', Integer, primary_key=True, autoincrement=True)
     group_name = Column('group_name', String(100))
 
-    #foreign keys
-    company_id = Column('company_id', Integer, ForeignKey('company.id'), nullable=False)
+    # foreign keys
+    company_id = Column('company_id', Integer,
+                        ForeignKey('company.id'), nullable=False)
 
     # proxy bindings
     company = relationship('Company', foreign_keys='Group.company_id')
@@ -85,11 +88,14 @@ class AuditQuestionAssociation(base):
 
     # foreign keys
     audit_id = Column("audit_id", ForeignKey("lpa_audit.id"))
-    question_id = Column("question_id", ForeignKey("lpa_question.id"), nullable=False)
+    question_id = Column("question_id", ForeignKey(
+        "lpa_question.id"), nullable=False)
 
     # proxy bindings
-    audit = relationship('LPAAudit', foreign_keys='AuditQuestionAssociation.audit_id')
-    question = relationship('LPAQuestion', foreign_keys='AuditQuestionAssociation.question_id')
+    audit = relationship(
+        'LPAAudit', foreign_keys='AuditQuestionAssociation.audit_id')
+    question = relationship(
+        'LPAQuestion', foreign_keys='AuditQuestionAssociation.question_id')
 
 
 class Layer(base):
@@ -115,21 +121,32 @@ class LPAAudit(base):
     recurrent_audit = Column('recurrent_audit', Boolean)
 
     # foreign keys
-    created_by_user_id = Column('created_by_user_id', ForeignKey('user.id'), nullable=False)
-    audited_user_id = Column('audited_user_id', ForeignKey('user.id'), nullable=True)
-    auditor_user_id = Column('auditor_user_id', ForeignKey('user.id'), nullable=False)
-    assigned_group_id = Column('assigned_group_id', ForeignKey('group.id'), nullable=False)
-    assigned_layer_id = Column('assigned_layer_id', ForeignKey('layer.id'), nullable=False)
+    created_by_user_id = Column(
+        'created_by_user_id', ForeignKey('user.id'), nullable=False)
+    audited_user_id = Column(
+        'audited_user_id', ForeignKey('user.id'), nullable=True)
+    auditor_user_id = Column(
+        'auditor_user_id', ForeignKey('user.id'), nullable=False)
+    assigned_group_id = Column(
+        'assigned_group_id', ForeignKey('group.id'), nullable=False)
+    assigned_layer_id = Column(
+        'assigned_layer_id', ForeignKey('layer.id'), nullable=False)
 
     # proxy bindings
-    created_by = relationship('User', foreign_keys='LPAAudit.created_by_user_id')
-    audited_user = relationship('User', foreign_keys='LPAAudit.audited_user_id')
+    created_by = relationship(
+        'User', foreign_keys='LPAAudit.created_by_user_id')
+    audited_user = relationship(
+        'User', foreign_keys='LPAAudit.audited_user_id')
     auditor = relationship('User', foreign_keys='LPAAudit.auditor_user_id')
-    assigned_group = relationship('Group', foreign_keys='LPAAudit.assigned_group_id')
-    assigned_layer = relationship('Layer', foreign_keys='LPAAudit.assigned_layer_id')
+    assigned_group = relationship(
+        'Group', foreign_keys='LPAAudit.assigned_group_id')
+    assigned_layer = relationship(
+        'Layer', foreign_keys='LPAAudit.assigned_layer_id')
 
     # n m relationship
-    questions = relationship("LPAQuestion", secondary='audit_question_association')
+    questions = relationship(
+        "LPAQuestion", secondary='audit_question_association')
+
 
 class LPAAuditDuration(base):
     __tablename__ = 'lpa_audit_duration'
@@ -143,6 +160,7 @@ class LPAAuditDuration(base):
 
     # proxy bindings
     audit = relationship('LPAAudit', foreign_keys='LPAAuditDuration.audit_id')
+
 
 class LPAQuestionCategory(base):
     __tablename__ = 'lpa_question_category'
@@ -159,14 +177,17 @@ class LPAQuestion(base):
     description = Column('description', String(250))
 
     # foreign keys
-    category_id = Column('category_id', ForeignKey('lpa_question_category.id'), nullable=False)
+    category_id = Column('category_id', ForeignKey(
+        'lpa_question_category.id'), nullable=False)
     layer_id = Column('layer_id', ForeignKey('layer.id'), nullable=True)
     group_id = Column('group_id', ForeignKey('group.id'), nullable=True)
 
     # proxy bindings
-    category = relationship('LPAQuestionCategory', foreign_keys='LPAQuestion.category_id')
+    category = relationship('LPAQuestionCategory',
+                            foreign_keys='LPAQuestion.category_id')
     layer = relationship('Layer', foreign_keys='LPAQuestion.layer_id')
     group = relationship('Group', foreign_keys='LPAQuestion.group_id')
+
 
 class LPAAnswer(base):
     __tablename__ = 'lpa_answer'
@@ -176,10 +197,14 @@ class LPAAnswer(base):
     comment = Column('comment', String(250))
 
     # foreign keys
-    lpa_answer_reason_id = Column('lpa_answer_reason_id', ForeignKey('lpa_answer_reason.id', ondelete='SET NULL'), nullable=True)
+    lpa_answer_reason_id = Column('lpa_answer_reason_id', ForeignKey(
+        'lpa_answer_reason.id', ondelete='SET NULL'), nullable=True)
+    audit_id = Column('audit_id', ForeignKey('lpa_audit.id'), nullable=False)
 
     # proxy bindings
-    lpa_answer_reason = relationship('LPAAnswerReason', foreign_keys='LPAAnswer.lpa_answer_reason_id')
+    lpa_answer_reason = relationship(
+        'LPAAnswerReason', foreign_keys='LPAAnswer.lpa_answer_reason_id')
+    audit = relationship('LPAAudit', foreign_keys='LPAAnswer.audit_id')
 
 
 class LPAAnswerReason(base):
@@ -212,4 +237,5 @@ class LPAAuditRecurrence(base):
     # proxy bindings
     group = relationship('Group', foreign_keys='LPAAuditRecurrence.group_id')
     layer = relationship('Layer', foreign_keys='LPAAuditRecurrence.layer_id')
-    recurrence_type = relationship('LPAAuditRecurrenceType', foreign_keys='LPAAuditRecurrence.recurrence_type_id')
+    recurrence_type = relationship(
+        'LPAAuditRecurrenceType', foreign_keys='LPAAuditRecurrence.recurrence_type_id')
