@@ -131,6 +131,18 @@ class LPAAudit(base):
     # n m relationship
     questions = relationship("LPAQuestion", secondary='audit_question_association')
 
+class LPAAuditDuration(base):
+    __tablename__ = 'lpa_audit_duration'
+
+    id = Column('id', Integer, primary_key=True, autoincrement=True)
+    context = Column('context', String(250), nullable=False)
+    duration = Column('duration', Integer, nullable=False)
+
+    # foreign keys
+    audit_id = Column('audit_id', ForeignKey('lpa_audit.id'), nullable=False)
+
+    # proxy bindings
+    audit = relationship('LPAAudit', foreign_keys='LPAAuditDuration.audit_id')
 
 class LPAQuestionCategory(base):
     __tablename__ = 'lpa_question_category'
