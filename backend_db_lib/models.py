@@ -200,11 +200,15 @@ class LPAAnswer(base):
     lpa_answer_reason_id = Column('lpa_answer_reason_id', ForeignKey(
         'lpa_answer_reason.id', ondelete='SET NULL'), nullable=True)
     audit_id = Column('audit_id', ForeignKey('lpa_audit.id'), nullable=False)
+    question_id = Column('question_id', ForeignKey(
+        'lpa_question.id'), nullable=False)
 
     # proxy bindings
     lpa_answer_reason = relationship(
         'LPAAnswerReason', foreign_keys='LPAAnswer.lpa_answer_reason_id')
     audit = relationship('LPAAudit', foreign_keys='LPAAnswer.audit_id')
+    question = relationship(
+        'LPAQuestion', foreign_keys='LPAAnswer.question_id')
 
 
 class LPAAnswerReason(base):
