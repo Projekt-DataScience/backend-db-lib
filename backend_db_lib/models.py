@@ -229,7 +229,10 @@ class LPAAuditRecurrence(base):
     # foreign keys
     group_id = Column('group_id', ForeignKey('group.id'), nullable=False)
     layer_id = Column('layer_id', ForeignKey('layer.id'), nullable=False)
+    auditor_id = Column('user_id', ForeignKey('user.id'), nullable=False)
 
     # proxy bindings
     group = relationship('Group', foreign_keys='LPAAuditRecurrence.group_id')
     layer = relationship('Layer', foreign_keys='LPAAuditRecurrence.layer_id')
+    auditor = relationship(
+        'User', foreign_keys='LPAAuditRecurrence.auditor_id')
