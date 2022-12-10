@@ -194,7 +194,7 @@ class LPAAnswer(base):
 
     id = Column('id', Integer, primary_key=True, autoincrement=True)
     answer = Column('answer', Integer)
-    comment = Column('comment', String(250))
+    comment = Column('comment', String(250), nullable=True)
 
     # foreign keys
     lpa_answer_reason_id = Column('lpa_answer_reason_id', ForeignKey(
