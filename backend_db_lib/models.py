@@ -117,6 +117,7 @@ class LPAAudit(base):
 
     id = Column('id', Integer, primary_key=True, autoincrement=True)
     due_date = Column('due_date', DateTime, nullable=False)
+    complete_datetime = Column('complete_datetime', DateTime, nullable=True)
     duration = Column('duration', Integer, nullable=True)
     recurrent_audit = Column('recurrent_audit', Boolean)
 
