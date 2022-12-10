@@ -218,28 +218,18 @@ class LPAAnswerReason(base):
     description = Column('description', String(250))
 
 
-class LPAAuditRecurrenceType(base):
-    __tablename__ = 'lpa_recurrence_type'
-
-    id = Column('id', Integer, primary_key=True, autoincrement=True)
-    description = Column('description', Integer)
-
-
 class LPAAuditRecurrence(base):
     __tablename__ = 'lpa_audit_recurrence'
 
     id = Column('id', Integer, primary_key=True, autoincrement=True)
     value = Column('value', Integer)
     question_count = Column('question_count', Integer)
+    type = Column('type', String(250), nullable=False)
 
     # foreign keys
     group_id = Column('group_id', ForeignKey('group.id'), nullable=False)
     layer_id = Column('layer_id', ForeignKey('layer.id'), nullable=False)
-    recurrence_type_id = Column('recurrence_type_id', ForeignKey('lpa_recurrence_type.id'),
-                                nullable=False)
 
     # proxy bindings
     group = relationship('Group', foreign_keys='LPAAuditRecurrence.group_id')
     layer = relationship('Layer', foreign_keys='LPAAuditRecurrence.layer_id')
-    recurrence_type = relationship(
-        'LPAAuditRecurrenceType', foreign_keys='LPAAuditRecurrence.recurrence_type_id')
