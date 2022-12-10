@@ -63,6 +63,28 @@ Finally you should see the data.
 
 ![image](https://user-images.githubusercontent.com/39222224/206850735-3a4699fa-31bf-4b09-bff2-3ca94cad2940.png)
 
+# How to run the examples
+
+1. Change directory to the examples directory
+
+2. Create a virtualenv in the exammples folder:
+
+![image](https://user-images.githubusercontent.com/39222224/206850980-7c8f82aa-ac3e-406e-a4b5-6a6932b6e768.png)
+
+3. Activate the virtualenv
+
+![image](https://user-images.githubusercontent.com/39222224/206851000-e19ad859-6e04-440f-b7cc-da40d6f82b62.png)
+
+4. Install the requirements
+
+```
+pip install -r requirements.txt
+```
+
+![image](https://user-images.githubusercontent.com/39222224/206851024-cd97f6e9-0735-4de1-9ff3-9c8f81568019.png)
+
+5. Now you can run any script inside the examples directory.
+
 
 # How to install library
 You can install the library by running the following pip command:
@@ -72,6 +94,12 @@ pip install --upgrade --force-reinstall git+https://github.com/Projekt-DataScien
 ```
 
 [![2022-12-10-11-21.png](https://i.postimg.cc/4yXtwkG9/2022-12-10-11-21.png)](https://postimg.cc/sQ0vDLvj)
+
+You can also add the following line to your requirements.txt:
+
+```
+git+https://github.com/Projekt-DataScience/backend-db-lib@main#egg=backend_db_lib
+```
 
 # How to reinstall
 **KEEP IN MIND THAT YOU WILL LOOSE ALL YOUR DATA IN THE DATABASE DURING THIS PROCESS**
