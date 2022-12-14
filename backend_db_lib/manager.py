@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 
 from sqlalchemy import (create_engine)
 from sqlalchemy.orm import sessionmaker
-from .models import Company, User, Role, Layer, Group, LPAQuestionCategory, LPAQuestion, LPAAnswerReason, LPAAudit, AuditQuestionAssociation
+from .models import Company, User, Role, Layer, Group, LPAQuestionCategory, LPAQuestion, LPAAnswerReason, LPAAudit, AuditQuestionAssociation, LPAAuditDuration
 
 
 class DatabaseManager:
@@ -190,6 +190,82 @@ class DatabaseManager:
                         AuditQuestionAssociation(
                             audit_id=audit.id,
                             question_id=question.id,
+                        )
+                    )
+
+            # Generate complete audits
+            durations = [
+                {
+                    "context": "overview",
+                    "time": 233
+                },
+                {
+                    "context": "question-id 1",
+                    "time": 12
+                },
+                {
+                    "context": "overview",
+                    "time": 234
+                },
+                {
+                    "context": "question-id 1",
+                    "time": 233
+                },
+                {
+                    "context": "overview",
+                    "time": 234
+                },
+                {
+                    "context": "question-id 2",
+                    "time": 233
+                },
+
+            ]
+            duration = 1179
+            for i in range(3):
+                due_date = datetime.now() + timedelta(days=random.randint(5, 15))
+                complete_date = datetime.now() + timedelta(days=3)
+                recurrent_audit = False
+
+                created_by_user_id = ceo_user.id
+                auditor_user_id = ceo_user.id
+                assigned_group_id = worker_user.group_id
+                assigned_layer_id = worker_user.layer_id
+
+                audit = LPAAudit(
+                    due_date=due_date,
+                    complete_date=complete_date,
+                    duration=duration,
+                    recurrent_audit=recurrent_audit,
+                    created_by_user_id=created_by_user_id,
+                    auditor_user_id=auditor_user_id,
+                    assigned_group_id=assigned_group_id,
+                    assigned_layer_id=assigned_layer_id,
+                )
+                session.add(audit)
+                session.flush()
+
+                # Generate audit questions
+                for i in range(0, random.randint(3, 8)):
+                    question = random.choice(question_data)
+
+                    session.add(
+                        AuditQuestionAssociation(
+                            audit_id=audit.id,
+                            question_id=question.id,
+                        )
+                    )
+
+                for d in durations:
+                    context = d["context"]
+                    duration = d["time"]
+                    audit_id = audit.id
+
+                    session.add(
+                        LPAAuditDuration(
+                            context=context,
+                            duration=duration,
+                            audit_id=audit_id,
                         )
                     )
 
