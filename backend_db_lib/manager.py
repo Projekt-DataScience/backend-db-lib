@@ -164,7 +164,10 @@ class DatabaseManager:
             # Generate audits
             for i in range(10):
                 due_date = datetime.now() + timedelta(days=random.randint(5, 15))
-                recurrent_audit = False
+                if i % 2 == 0:
+                    recurrent_audit = False
+                else:
+                    recurrent_audit = True
 
                 created_by_user_id = ceo_user.id
                 auditor_user_id = ceo_user.id
