@@ -140,7 +140,7 @@ class DatabaseManager:
                         description=question["question"],
                         category_id=session.query(LPAQuestionCategory).filter(
                             LPAQuestionCategory.category_name == question["category"]
-                        ).id,
+                        ).first().id,
                         layer_id=layers[0].id,
                         group_id=groups[0].id,
                     )
