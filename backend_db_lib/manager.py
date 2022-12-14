@@ -32,6 +32,8 @@ class DatabaseManager:
 
     def create_initial_data(self):
         with self.create_session() as session:
+            profile_picture_url = "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+
             # add company
             company = Company(
                 id=None,
@@ -87,7 +89,7 @@ class DatabaseManager:
                 last_name='Stahl',
                 email='josef@test.de',
                 password_hash=User.generate_hash('test'),
-                profile_picture_url=None,
+                profile_picture_url=profile_picture_url,
                 supervisor_id=None,
                 company_id=company.id,
                 role_id=roles[2].id,
@@ -102,7 +104,7 @@ class DatabaseManager:
                 last_name='Stahl',
                 email='josef@test.de',
                 password_hash=User.generate_hash('test'),
-                profile_picture_url=None,
+                profile_picture_url="https://images.unsplash.com/photo-1628890920690-9e29d0019b9b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
                 supervisor_id=None,
                 company_id=company.id,
                 role_id=roles[1].id,
@@ -120,7 +122,7 @@ class DatabaseManager:
                 last_name='Baum',
                 email='michl@test.de',
                 password_hash=User.generate_hash('test'),
-                profile_picture_url=None,
+                profile_picture_url="https://images.unsplash.com/photo-1639747280804-dd2d6b3d88ac?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
                 supervisor_id=ceo_user.id,
                 company_id=company.id,
                 role_id=roles[0].id,
