@@ -5,10 +5,7 @@ on:
     branches: ["main"]
 
 jobs:
-  build:
-    strategy:
-      matrix:
-        python-version: [3.8.8]
+  run-tests:
     runs-on: ubuntu-latest
 
     steps:
