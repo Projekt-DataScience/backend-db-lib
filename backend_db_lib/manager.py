@@ -237,7 +237,7 @@ class DatabaseManager:
 
                 audit = LPAAudit(
                     due_date=due_date,
-                    complete_date=complete_date,
+                    complete_datetime=complete_date,
                     duration=duration,
                     recurrent_audit=recurrent_audit,
                     created_by_user_id=created_by_user_id,
