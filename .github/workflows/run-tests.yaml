@@ -1,3 +1,5 @@
+# This github workflow runs tests with pytest
+
 on:
   push:
     branches: ["main"]
@@ -18,13 +20,11 @@ jobs:
       - name: Switch to Current Branch
         run: git checkout ${{ env.BRANCH }}
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v1
-        with:
-          python-version: ${{ matrix.python-version }}
+      - name: Set up Python
+        run: sudo apt update && sudo apt-get install -y python3 python3-pip
 
       - name: Install dependencies
-        run: python -m pip install --upgrade pip && pip install -r requirements.txt
+        run: python3 -m pip install --upgrade pip && pip install -r requirements.txt
 
       - name: Run unit tests
-        run: python -m pytest
+        run: python3 -m pytest
