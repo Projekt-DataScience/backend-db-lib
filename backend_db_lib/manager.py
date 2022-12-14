@@ -1,6 +1,9 @@
+import random
+import string
+
 from sqlalchemy import (create_engine)
 from sqlalchemy.orm import sessionmaker
-from .models import Company, User, Role, Layer, Group, LPAQuestionCategory, LPAQuestion
+from .models import Company, User, Role, Layer, Group, LPAQuestionCategory, LPAQuestion, LPAAnswerReason
 
 
 class DatabaseManager:
@@ -145,5 +148,12 @@ class DatabaseManager:
                         group_id=groups[0].id,
                     )
                 )
+
+            # Generate answer reasons
+            for i in range(10):
+                description = "".join(random.choices(
+                string.ascii_uppercase + string.digits, k=10))
+
+                session.add(LPAAnswerReason(description=description))
 
             session.commit()
