@@ -2,3 +2,4 @@ databases[postgresql]
 psycopg2-binary
 sqlalchemy
 passlib
+pytest
