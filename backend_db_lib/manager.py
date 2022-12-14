@@ -139,7 +139,7 @@ class DatabaseManager:
                         question=question["question"],
                         description=question["question"],
                         category_id=session.query(LPAQuestionCategory).filter(
-                            LPAQuestionCategory.name == question["category"]
+                            LPAQuestionCategory.category_name == question["category"]
                         ).id,
                         layer_id=layers[0].id,
                         group_id=groups[0].id,
