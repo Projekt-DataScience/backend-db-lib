@@ -3,7 +3,7 @@ from backend_db_lib.models import (
     base, User, Company, Role, Group,
     Layer, LPAQuestionCategory, LPAQuestion,
     LPAAnswerReason, LPAAudit, AuditQuestionAssociation,
-    LPAAuditDuration
+    LPAAuditDuration, LPAAnswer
     )
 from backend_db_lib.manager import DatabaseManager
 
@@ -11,20 +11,21 @@ from backend_db_lib.manager import DatabaseManager
 class TestDatabaseManager(unittest.TestCase):
 
     def setUp(self):
-        self.db = DatabaseManager(base, "sqlite:///test.db")        
+        self.db = DatabaseManager(base, "sqlite:///test.db")   
         self.db.create_all()
+        self.db.create_initial_data()
 
     def tearDown(self) -> None:
         self.db.drop_all()
+        
 
     def test_database_intialize(self):
-        self.db.create_initial_data()
 
         models = [
             User, Company, Role, Group, Layer,
             LPAQuestionCategory, LPAQuestion, 
             LPAAnswerReason, LPAAudit, AuditQuestionAssociation, 
-            LPAAuditDuration
+            LPAAuditDuration, LPAAnswer
         ]
 
         with self.db.create_session() as session:
