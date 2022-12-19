@@ -7,7 +7,7 @@ from sqlalchemy import (create_engine)
 from sqlalchemy.orm import sessionmaker
 from .models import Company, User, Role, Layer, Group, LPAQuestionCategory, LPAQuestion, LPAAnswerReason, LPAAudit, AuditQuestionAssociation, LPAAuditDuration, LPAAnswer
 
-from backend_db_lib.helpers.recurrence import RecurrenceHelper, RECURRENCE_TYPES, WEEKLY_TYPES, YEARLY_TYPES
+from .helpers.recurrence import RecurrenceHelper, RECURRENCE_TYPES, WEEKLY_TYPES, YEARLY_TYPES
 
 
 class DatabaseManager:
