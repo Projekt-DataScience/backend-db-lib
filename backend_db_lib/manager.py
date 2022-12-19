@@ -7,6 +7,8 @@ from sqlalchemy import (create_engine)
 from sqlalchemy.orm import sessionmaker
 from .models import Company, User, Role, Layer, Group, LPAQuestionCategory, LPAQuestion, LPAAnswerReason, LPAAudit, AuditQuestionAssociation, LPAAuditDuration, LPAAnswer
 
+from backend_db_lib.helpers.recurrence import RecurrenceHelper, RECURRENCE_TYPES, WEEKLY_TYPES, YEARLY_TYPES
+
 
 class DatabaseManager:
     def __init__(self, database_base, database_url):
@@ -320,5 +322,67 @@ class DatabaseManager:
                             audit=audit,
                         )
                     )
+
+
+                # Create Recurrence
+                RecurrenceHelper.create_rhytm(
+                    session,
+                    ceo_user,
+                    groups[0],
+                    layers[0],
+                    RECURRENCE_TYPES.WEEKLY,
+                    3, 
+                    [ WEEKLY_TYPES.MONDAY, WEEKLY_TYPES.WEDNESDAY, WEEKLY_TYPES.FRIDAY ],
+                )
+
+                RecurrenceHelper.create_rhytm(
+                    session,
+                    worker_user,
+                    groups[0],
+                    layers[0],
+                    RECURRENCE_TYPES.WEEKLY,
+                    3, 
+                    [ WEEKLY_TYPES.MONDAY, WEEKLY_TYPES.WEDNESDAY, WEEKLY_TYPES.FRIDAY ],
+                )
+
+                RecurrenceHelper.create_rhytm(
+                    session,
+                    worker_user,
+                    groups[1],
+                    layers[1],
+                    RECURRENCE_TYPES.WEEKLY,
+                    3, 
+                    [ WEEKLY_TYPES.MONDAY, WEEKLY_TYPES.WEDNESDAY, WEEKLY_TYPES.FRIDAY ],
+                )
+
+                RecurrenceHelper.create_rhytm(
+                    session,
+                    worker_user,
+                    groups[2],
+                    layers[2],
+                    RECURRENCE_TYPES.WEEKLY,
+                    3, 
+                    [ WEEKLY_TYPES.MONDAY, WEEKLY_TYPES.WEDNESDAY, WEEKLY_TYPES.FRIDAY ],
+                )
+
+                RecurrenceHelper.create_rhytm(
+                    session,
+                    worker_user,
+                    groups[0],
+                    layers[0],
+                    RECURRENCE_TYPES.MONTHLY,
+                    3, 
+                    [ 1, 15, 20 ],
+                )
+
+                RecurrenceHelper.create_rhytm(
+                    session,
+                    worker_user,
+                    groups[0],
+                    layers[0],
+                    RECURRENCE_TYPES.YEARLY,
+                    3, 
+                    [ YEARLY_TYPES.JANUARY, YEARLY_TYPES.MARCH, YEARLY_TYPES.MAY, YEARLY_TYPES.DECEMBER ],
+                )
 
             session.commit()
