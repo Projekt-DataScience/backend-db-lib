@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from typing import List, Union
 
-from models import LPAAuditRecurrence, User, Group, Layer
+from .models import LPAAuditRecurrence, User, Group, Layer
 
 class WEEKLY_TYPES:
     MONDAY = "monday"
