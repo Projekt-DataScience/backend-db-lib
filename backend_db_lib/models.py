@@ -8,6 +8,7 @@ PASSLIB_CONTEXT = CryptContext(
     schemes=['pbkdf2_sha512'],
     deprecated='auto',
 )
+PASSLIB_SALT = 'CHANGEME'
 
 
 class Company(base):
@@ -56,7 +57,7 @@ class User(base):
 
     @staticmethod
     def generate_hash(password):
-        return PASSLIB_CONTEXT.hash(password.encode('utf8'))
+        return PASSLIB_CONTEXT.hash(password.encode('utf8'), salt=PASSLIB_SALT)
 
 
 class Role(base):
