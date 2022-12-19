@@ -56,7 +56,7 @@ class User(base):
 
     @staticmethod
     def generate_hash(password):
-        return PASSLIB_CONTEXT.hash(password.encode('utf8'), salt=PASSLIB_SALT)
+        return PASSLIB_CONTEXT.hash(password.encode('utf8'))
 
 
 class Role(base):
