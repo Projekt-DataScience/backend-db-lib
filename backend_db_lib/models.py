@@ -8,7 +8,7 @@ PASSLIB_CONTEXT = CryptContext(
     schemes=['pbkdf2_sha512'],
     deprecated='auto',
 )
-PASSLIB_SALT = 'CHANGEME'
+PASSLIB_SALT = "a"*22
 
 
 class Company(base):
