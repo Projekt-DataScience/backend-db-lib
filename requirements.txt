@@ -1,5 +1,5 @@
 databases[postgresql]
 psycopg2-binary
-sqlalchemy
+sqlalchemy==1.4.46
 passlib
 pytest
